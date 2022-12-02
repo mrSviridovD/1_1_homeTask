@@ -58,13 +58,8 @@ app.delete('/videos/:id',(req:Request,res:Response) => {
             videos.splice(i,1);
             res.send(204)
             return
-        }else {
-            res.send(404)
-            return
         }
     }
-
-
-
+    res.send(404)
 
 })
