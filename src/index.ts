@@ -7,6 +7,7 @@ const parserMiddleware =bodyParser({})
 app.use(parserMiddleware)
 
 let createdAt = new Date();
+let createdAt2 = createdAt.toISOString()
 let nextDay = 60 * 60 * 24 * 1000;
 let nextDate = new Date(createdAt.getTime() + nextDay)
 
@@ -99,7 +100,7 @@ app.post('/videos',(req:Request,res:Response) => {
             author: req.body.author,
             canBeDownloaded: req.body.canBeDownloaded || false,
             minAgeRestriction: req.body.minAgeRestriction || null,
-            createdAt: new Date().toISOString(),
+            createdAt: createdAt2,
             publicationDate: nextDate.toISOString(),
             availableResolutions: req.body.availableResolutions || ['P144']
         }
