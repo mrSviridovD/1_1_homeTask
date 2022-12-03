@@ -80,22 +80,22 @@ app.delete('/videos/:id',(req:Request,res:Response) => {
 app.post('/videos',(req:Request,res:Response) => {
     if (!req.body.title){
         errorsMessages.push({massage: 'Title не заполнен', field:'title'})
-        res.status(404).send(errorsMessages.pop())
+        res.status(400).send(errorsMessages.pop())
         return;
     }
     if (!req.body.author){
         errorsMessages.push({massage: 'author не заполнен', field:'author'})
-        res.status(404).send(errorsMessages.pop())
+        res.status(400).send(errorsMessages.pop())
         return;
     }
     if (req.body.title.length > 40 ){
         errorsMessages.push({massage: 'Длина title больше 40 символов', field:'title'})
-        res.status(404).send(errorsMessages.pop())
+        res.status(400).send(errorsMessages.pop())
         return
     }
     if (req.body.author.length > 40 ){
         errorsMessages.push({massage: 'Длина author больше 40 символов', field:'author'})
-        res.status(404).send(errorsMessages.pop())
+        res.status(400).send(errorsMessages.pop())
         return
     }
     const newVideo = {
