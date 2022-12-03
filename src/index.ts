@@ -108,7 +108,7 @@ app.post('/videos',(req:Request,res:Response) => {
     videos.push(newVideo)
     res.status(201).send(newVideo)
 })
-app.delete('/all-data',(req:Request,res:Response) => {
+app.delete('/testing/all-data',(req:Request,res:Response) => {
     videos = []
     res.sendStatus(204)
 
