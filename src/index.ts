@@ -114,14 +114,39 @@ app.delete('/testing/all-data',(req:Request,res:Response) => {
 
 })
 
-
 app.put('/videos/:id',(req:Request, res:Response) => {
+    if (!req.body.title){
+        let errorList = [{errorsMessages:[{massage: 'title не заполнен', field:'title'}] }]
+        res.status(400).send(errorList.pop())
+        return;
+    }
+    if (!req.body.author){
+        let errorList = [{errorsMessages:[{massage: 'author не заполнен', field:'author'}] }]
+        res.status(400).send(errorList.pop())
+        return;
+    }
+    if (req.body.title.length > 40 ){
+        let errorList = [{errorsMessages:[{massage: 'Длина title больше 40 символов', field:'title'}] }]
+        res.status(400).send(errorList.pop())
+        return
+    }
+    if (req.body.author.length > 40 ){
+        let errorList = [{errorsMessages:[{massage: 'Длина author больше 40 символов', field:'author'}] }]
+        res.status(400).send(errorList.pop())
+        return
+    }
     let video = videos.find(v => v.id === +req.params.id)
     if(video){
         video.title = req.body.title
-        res.status(201)
+        video.author = req.body.author
+        video.availableResolutions = req.body.availableResolutions
+        video.canBeDownloaded = req.body.canBeDownloaded
+        video.minAgeRestriction = req.body.minAgeRestriction
+        video.publicationDate = createdAt2
+        res.status(204)
     }else {
-        res.status(404)
+        res.sendStatus(404)
     }
 })
+
 
