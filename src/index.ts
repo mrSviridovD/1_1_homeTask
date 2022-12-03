@@ -58,7 +58,7 @@ app.listen(port, () => {
 app.get('/videos/:id',(req:Request, res:Response) => {
     let video = videos.find(v => v.id === +req.params.id)
     if(video){
-        res.sendStatus(200).send(video)
+        res.status(200).send(video)
     }else {
         res.sendStatus(404)
     }
@@ -80,22 +80,22 @@ app.delete('/videos/:id',(req:Request,res:Response) => {
 app.post('/videos',(req:Request,res:Response) => {
     if (!req.body.title){
         errorsMessages.push({massage: 'Title не заполнен', field:'title'})
-        res.sendStatus(404).send(errorsMessages.pop())
+        res.status(404).send(errorsMessages.pop())
         return;
     }
     if (!req.body.author){
         errorsMessages.push({massage: 'author не заполнен', field:'author'})
-        res.sendStatus(404).send(errorsMessages.pop())
+        res.status(404).send(errorsMessages.pop())
         return;
     }
     if (req.body.title.length > 40 ){
         errorsMessages.push({massage: 'Длина title больше 40 символов', field:'title'})
-        res.sendStatus(404)
+        res.status(404).send(errorsMessages.pop())
         return
     }
     if (req.body.author.length > 40 ){
         errorsMessages.push({massage: 'Длина author больше 40 символов', field:'author'})
-        res.sendStatus(404)
+        res.status(404).send(errorsMessages.pop())
         return
     }
     const newVideo = {
