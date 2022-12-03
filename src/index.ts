@@ -1,7 +1,17 @@
 import express, {Request, Response} from 'express'
+import bodyParser from 'body-parser'
 
 const app = express()
 const port = process.env.PORT || 3000
+const parserMiddleware =bodyParser({})
+app.use(parserMiddleware)
+
+// let createdAt = new Date().toISOString();
+
+let createdAt = new Date();
+let nextDay = 60 * 60 * 24 * 1000;
+let nextDate = new Date(createdAt.getTime() + nextDay)
+
 
 const videos = [
     {
@@ -30,6 +40,12 @@ const videos = [
     },
 
 ]
+let errorsMessages = [
+    {
+        massage: "Все отлично",
+        field: "-"
+    }
+]
 
 
 
@@ -44,9 +60,9 @@ app.listen(port, () => {
 app.get('/videos/:id',(req:Request, res:Response) => {
     let video = videos.find(v => v.id === +req.params.id)
     if(video){
-        res.send(video)
+        res.sendStatus(200).send(video)
     }else {
-        res.send(404)
+        res.sendStatus(404)
     }
 })
 app.get('/videos',(req: Request,res:Response) => {
@@ -56,10 +72,56 @@ app.delete('/videos/:id',(req:Request,res:Response) => {
     for (let i = 0; i < videos.length; i++) {
         if(videos[i].id === +req.params.id){
             videos.splice(i,1);
-            res.send(204)
+            res.sendStatus(204)
             return
         }
     }
-    res.send(404)
+    res.sendStatus(404)
 
 })
+app.post('/videos',(req:Request,res:Response) => {
+    if (!req.body.title){
+        errorsMessages.push({massage: 'Title не заполнен', field:'title'})
+        res.sendStatus(404).send(errorsMessages.pop())
+        return;
+    }
+    if (!req.body.author){
+        errorsMessages.push({massage: 'author не заполнен', field:'author'})
+        res.sendStatus(404).send(errorsMessages.pop())
+        return;
+    }
+    if (req.body.title.length > 40 ){
+        errorsMessages.push({massage: 'Длина title больше 40 символов', field:'title'})
+        res.sendStatus(404)
+        return
+    }
+    if (req.body.author.length > 40 ){
+        errorsMessages.push({massage: 'Длина author больше 40 символов', field:'author'})
+        res.sendStatus(404)
+        return
+    }
+    const newVideo = {
+            id: +(new Date()),
+            title: req.body.title,
+            author: req.body.author,
+            canBeDownloaded: req.body.canBeDownloaded || false,
+            minAgeRestriction: req.body.minAgeRestriction || null,
+            createdAt: new Date().toISOString(),
+            publicationDate: nextDate,
+            availableResolutions: req.body.availableResolutions || ['P144']
+
+        }
+    res.sendStatus(201).send(newVideo)
+})
+
+
+app.put('/videos/:id',(req:Request, res:Response) => {
+    let video = videos.find(v => v.id === +req.params.id)
+    if(video){
+        video.title = req.body.title
+        res.status(201)
+    }else {
+        res.status(404)
+    }
+})
+
