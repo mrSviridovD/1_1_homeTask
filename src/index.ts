@@ -6,14 +6,12 @@ const port = process.env.PORT || 3000
 const parserMiddleware =bodyParser({})
 app.use(parserMiddleware)
 
-// let createdAt = new Date().toISOString();
-
 let createdAt = new Date();
 let nextDay = 60 * 60 * 24 * 1000;
 let nextDate = new Date(createdAt.getTime() + nextDay)
 
 
-const videos = [
+let videos = [
     {
         id: 1,
         title: "Звёздные войны: Эпизод 1 – Скрытая угроза",
@@ -107,10 +105,12 @@ app.post('/videos',(req:Request,res:Response) => {
             canBeDownloaded: req.body.canBeDownloaded || false,
             minAgeRestriction: req.body.minAgeRestriction || null,
             createdAt: new Date().toISOString(),
-            publicationDate: nextDate,
+            publicationDate: nextDate.toISOString(),
             availableResolutions: req.body.availableResolutions || ['P144']
 
         }
+
+    videos.push(newVideo)
     res.sendStatus(201).send(newVideo)
 })
 
