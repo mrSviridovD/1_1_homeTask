@@ -150,13 +150,3 @@ app.put('/videos/:id',(req:Request, res:Response) => {
     }
 })
 
-app.put('/videos/:id',(req:Request, res:Response) => {
-    let video = videos.find(v => v.id === +req.params.id)
-    if(video){
-        video.title = req.body.title
-        res.status(201)
-    }else {
-        res.status(404)
-    }
-})
-
