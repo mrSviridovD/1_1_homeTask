@@ -107,11 +107,10 @@ app.post('/videos',(req:Request,res:Response) => {
             createdAt: new Date().toISOString(),
             publicationDate: nextDate.toISOString(),
             availableResolutions: req.body.availableResolutions || ['P144']
-
         }
 
     videos.push(newVideo)
-    res.sendStatus(201).send(newVideo)
+    res.status(201).send(newVideo)
 })
 
 
