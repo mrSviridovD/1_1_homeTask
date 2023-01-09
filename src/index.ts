@@ -133,31 +133,47 @@ app.delete('/testing/all-data',(req:Request,res:Response) => {
     res.sendStatus(204)
 
 })
-
 app.put('/videos/:id',(req:Request, res:Response) => {
 
     let video = videos.find(v => v.id === +req.params.id)
-    if(video){
-        if (!req.body.title){
-            let errorList = [{errorsMessages:[{massage: 'title не заполнен', field:'title'}] }]
-            res.status(400).send(errorList.pop())
-            return;
-        }
-        if (!req.body.author){
-            let errorList = [{errorsMessages:[{massage: 'author не заполнен', field:'author'}] }]
-            res.status(400).send(errorList.pop())
-            return;
-        }
-        if (req.body.title.length > 40 ){
-            let errorList = [{errorsMessages:[{massage: 'Длина title больше 40 символов', field:'title'}] }]
-            res.status(400).send(errorList.pop())
-            return
-        }
-        if (req.body.author.length > 40 ){
-            let errorList = [{errorsMessages:[{massage: 'Длина author больше 40 символов', field:'author'}] }]
-            res.status(400).send(errorList.pop())
-            return
-        }
+    if (!video) {
+        res.sendStatus(404)
+        return;
+    }
+
+    const title = req.body.title;
+    const author = req.body.author;
+    const canBeDownloaded = req.body.canBeDownloaded;
+    const minAgeRestriction = req.body.minAgeRestriction;
+    const publicationDate = req.body.publicationDate;
+
+    if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
+        errorsArray.push(errTitle);
+    }
+
+    if (!author || !author.trim() || typeof author !== "string" || author.length > 20) {
+        errorsArray.push(errAuthor);
+    }
+
+    if (typeof canBeDownloaded != "boolean") {
+        errorsArray.push(errCanBeDownloaded);
+    }
+
+    if (typeof minAgeRestriction != "number" || minAgeRestriction < 1 || minAgeRestriction > 18) {
+        errorsArray.push(errMinAgeRestriction);
+    }
+
+    if (typeof publicationDate != "string") {
+        errorsArray.push(errPublicationDate);
+    }
+
+    if (errorsArray.length > 0) {
+        errors = { errorsMessages: errorsArray};
+        res
+            .status(400)
+            .json(errors)
+        return;
+    }
         video.title = req.body.title
         video.author = req.body.author
         video.availableResolutions = req.body.availableResolutions
@@ -165,8 +181,5 @@ app.put('/videos/:id',(req:Request, res:Response) => {
         video.minAgeRestriction = req.body.minAgeRestriction
         video.publicationDate = createdAt2
         res.status(204)
-    }else {
-        res.sendStatus(404)
-    }
 })
 
