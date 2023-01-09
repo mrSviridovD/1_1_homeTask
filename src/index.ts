@@ -60,11 +60,12 @@ app.listen(port, () => {
 
 app.get('/videos/:id',(req:Request, res:Response) => {
     let video = videos.find(v => v.id === +req.params.id)
-    if(video){
-        res.status(200).send(video)
-    }else {
+    if (!video) {
         res.sendStatus(404)
+        return;
     }
+
+    res.json(video)
 })
 app.get('/videos',(req: Request,res:Response) => {
     res.send(videos)
