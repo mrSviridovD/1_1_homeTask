@@ -134,7 +134,7 @@ app.delete('/testing/all-data',(req:Request,res:Response) => {
 
 })
 app.put('/videos/:id',(req:Request, res:Response) => {
-
+    errorsArray = [];
     let video = videos.find(v => v.id === +req.params.id)
     if (!video) {
         res.sendStatus(404)
