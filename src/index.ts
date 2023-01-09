@@ -11,7 +11,6 @@ let createdAt2 = createdAt.toISOString()
 let nextDay = 60 * 60 * 24 * 1000;
 let nextDate = new Date(createdAt.getTime() + nextDay)
 
-
 let videos = [
     {
         id: 1,
@@ -39,8 +38,17 @@ let videos = [
     },
 
 ]
+const arrayType: Array<string> = ["P144", "P240", "P360", "P480", "P720", "P1080", "P1440", "P2160"];
 
+let errorsArray: Array<object> = [];
+let errors = { errorsMessages: errorsArray};
 
+const errTitle = {message: "Incorrect values", field : "title"};
+const errAuthor = {message: "Incorrect values", field : "author"};
+const errCanBeDownloaded = {message: "Incorrect values", field : "canBeDownloaded"};
+const errResolutions = {message: "Incorrect values", field : "availableResolutions"};
+const errMinAgeRestriction = {message: "Incorrect values", field : "minAgeRestriction"};
+const errPublicationDate = {message: "Incorrect values", field : "publicationDate"};
 
 app.get('/', (req: Request, res: Response) => {
     let helloMes = 'Hello World!';
@@ -74,28 +82,40 @@ app.delete('/videos/:id',(req:Request,res:Response) => {
 })
 app.post('/videos',(req:Request,res:Response) => {
 
-    if (!req.body.title){
-        let errorList = [{errorsMessages:[{massage: 'title не заполнен', field:'title'}] }]
-        res.status(400).send(errorList.pop())
+    const title = req.body.title;
+    const author = req.body.author;
+    const availableResolutions = req.body.availableResolutions;
+    let keyErr = 0;
+
+    availableResolutions.forEach((a: string) => {
+        if (arrayType.includes(a) === false) {
+            keyErr++;
+        }
+    })
+    errorsArray = [];
+    if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
+        errorsArray.push(errTitle);
+    }
+
+    if (!author || !author.trim() || typeof author !== "string" || author.length > 20) {
+        errorsArray.push(errAuthor);
+    }
+
+    if (keyErr > 0) {
+        errorsArray.push(errResolutions);
+    }
+
+
+    if (errorsArray.length > 0) {
+        errors = { errorsMessages: errorsArray};
+        res
+            .status(400)
+            .json(errors)
         return;
     }
-    if (!req.body.author){
-        let errorList = [{errorsMessages:[{massage: 'author не заполнен', field:'author'}] }]
-        res.status(400).send(errorList.pop())
-        return;
-    }
-    if (req.body.title.length > 40 ){
-        let errorList = [{errorsMessages:[{massage: 'Длина title больше 40 символов', field:'title'}] }]
-        res.status(400).send(errorList.pop())
-        return
-    }
-    if (req.body.author.length > 40 ){
-        let errorList = [{errorsMessages:[{massage: 'Длина author больше 40 символов', field:'author'}] }]
-        res.status(400).send(errorList.pop())
-        return
-    }
+
     const newVideo = {
-            id: +(new Date()),
+            id: +(createdAt),
             title: req.body.title,
             author: req.body.author,
             canBeDownloaded: req.body.canBeDownloaded || false,
