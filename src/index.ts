@@ -87,7 +87,7 @@ app.post('/videos',(req:Request,res:Response) => {
     let keyErr = 0;
 
     availableResolutions.forEach((a: string) => {
-        if (arrayType.includes(a) === false) {
+        if (!arrayType.includes(a)) {
             keyErr++;
         }
     })
