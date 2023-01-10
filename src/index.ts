@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 
 const app = express()
 const port = process.env.PORT || 3000
-const parserMiddleware = express.json()
+const parserMiddleware =bodyParser({})
 app.use(parserMiddleware)
 
 let createdAt = new Date();
