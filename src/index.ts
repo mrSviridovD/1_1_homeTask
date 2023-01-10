@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 
 const app = express()
 const port = process.env.PORT || 3000
-const parserMiddleware =bodyParser({})
+const parserMiddleware = express.json()
 app.use(parserMiddleware)
 
 let createdAt = new Date();
@@ -54,10 +54,6 @@ app.get('/', (req: Request, res: Response) => {
     let helloMes = 'Hello World!';
     res.send(helloMes)
 })
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
 app.get('/videos/:id',(req:Request, res:Response) => {
     let video = videos.find(v => v.id === +req.params.id)
     if (!video) {
@@ -67,18 +63,20 @@ app.get('/videos/:id',(req:Request, res:Response) => {
 
     res.json(video)
 })
+
 app.get('/videos',(req: Request,res:Response) => {
     res.send(videos)
 })
+
 app.delete('/videos/:id',(req:Request,res:Response) => {
-    for (let i = 0; i < videos.length; i++) {
-        if(videos[i].id === +req.params.id){
-            videos.splice(i,1);
-            res.sendStatus(204)
-            return
-        }
+    let video = videos.find(v => v.id === +req.params.id)
+    if (!video) {
+        res.sendStatus(404)
+        return;
     }
-    res.sendStatus(404)
+    videos = videos.filter(v => v.id !== +req.params.id)
+
+    res.sendStatus(204)
 
 })
 app.post('/videos',(req:Request,res:Response) => {
@@ -182,5 +180,9 @@ app.put('/videos/:id',(req:Request, res:Response) => {
         video.minAgeRestriction = req.body.minAgeRestriction
         video.publicationDate = createdAt2
         res.status(204)
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
 })
 
