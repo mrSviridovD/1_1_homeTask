@@ -139,7 +139,6 @@ app.put('/videos/:id',(req:Request, res:Response) => {
         res.sendStatus(404)
         return;
     }
-
     const title = req.body.title;
     const author = req.body.author;
     const canBeDownloaded = req.body.canBeDownloaded;
@@ -169,7 +168,7 @@ app.put('/videos/:id',(req:Request, res:Response) => {
     if (errorsArray.length > 0) {
         errors = { errorsMessages: errorsArray};
         res
-            .status(400)
+            .status(404)
             .json(errors)
         return;
     }
