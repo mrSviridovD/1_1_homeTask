@@ -121,7 +121,7 @@ app.post('/videos',(req:Request,res:Response) => {
             minAgeRestriction: req.body.minAgeRestriction || null,
             createdAt: createdAt2,
             publicationDate: nextDate.toISOString(),
-            availableResolutions: req.body.availableResolutions || ['P144']
+            availableResolutions: req.body.availableResolutions
         }
 
     videos.push(newVideo)
