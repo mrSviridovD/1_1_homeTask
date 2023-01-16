@@ -147,10 +147,12 @@ app.put('/videos/:id',(req:Request, res:Response) => {
 
     if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
         errorsArray.push(errTitle);
+        return;
     }
 
     if (!author || !author.trim() || typeof author !== "string" || author.length > 20) {
         errorsArray.push(errAuthor);
+        return;
     }
 
     if (typeof canBeDownloaded != "boolean") {
