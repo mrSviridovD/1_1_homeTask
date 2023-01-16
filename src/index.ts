@@ -141,10 +141,9 @@ app.put('/videos/:id',(req:Request, res:Response) => {
     }
     const title = req.body.title;
     const author = req.body.author;
-
-    // const canBeDownloaded = req.body.canBeDownloaded;
-    // const minAgeRestriction = req.body.minAgeRestriction;
-    // const publicationDate = req.body.publicationDate;
+    const canBeDownloaded = req.body.canBeDownloaded;
+    const minAgeRestriction = req.body.minAgeRestriction;
+    const publicationDate = req.body.publicationDate;
 
     if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
         errorsArray.push(errTitle);
@@ -154,17 +153,17 @@ app.put('/videos/:id',(req:Request, res:Response) => {
         errorsArray.push(errAuthor);
     }
 
-    // if (typeof canBeDownloaded != "boolean") {
-    //     errorsArray.push(errCanBeDownloaded);
-    // }
-    //
-    // if (typeof minAgeRestriction != "number" || minAgeRestriction < 1 || minAgeRestriction > 18) {
-    //     errorsArray.push(errMinAgeRestriction);
-    // }
-    //
-    // if (typeof publicationDate != "string") {
-    //     errorsArray.push(errPublicationDate);
-    // }
+    if (typeof canBeDownloaded != "boolean") {
+        errorsArray.push(errCanBeDownloaded);
+    }
+
+    if (typeof minAgeRestriction != "number" || minAgeRestriction < 1 || minAgeRestriction > 18) {
+        errorsArray.push(errMinAgeRestriction);
+    }
+
+    if (typeof publicationDate != "string") {
+        errorsArray.push(errPublicationDate);
+    }
 
     if (errorsArray.length > 0) {
         errors = { errorsMessages: errorsArray};
