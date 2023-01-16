@@ -145,14 +145,22 @@ app.put('/videos/:id',(req:Request, res:Response) => {
     const minAgeRestriction = req.body.minAgeRestriction;
     const publicationDate = req.body.publicationDate;
 
-    if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
+    if (!title) {
         errorsArray.push(errTitle);
         return;
     }
 
+    if (!author) {
+        errorsArray.push(author);
+        return;
+    }
+
+    if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
+        errorsArray.push(errTitle);
+    }
+
     if (!author || !author.trim() || typeof author !== "string" || author.length > 20) {
         errorsArray.push(errAuthor);
-        return;
     }
 
     if (typeof canBeDownloaded != "boolean") {
