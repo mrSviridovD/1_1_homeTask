@@ -178,8 +178,7 @@ app.put('/videos/:id',(req:Request, res:Response) => {
         video.canBeDownloaded = req.body.canBeDownloaded
         video.minAgeRestriction = req.body.minAgeRestriction
         video.publicationDate = createdAt2
-        res.status(204)
-    return;
+        res.sendStatus(204)
 })
 
 app.listen(port, () => {
