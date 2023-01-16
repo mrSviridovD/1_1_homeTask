@@ -145,16 +145,6 @@ app.put('/videos/:id',(req:Request, res:Response) => {
     const minAgeRestriction = req.body.minAgeRestriction;
     const publicationDate = req.body.publicationDate;
 
-    if (!title) {
-        errorsArray.push(errTitle);
-        return;
-    }
-
-    if (!author) {
-        errorsArray.push(author);
-        return;
-    }
-
     if (!title || !title.trim() || typeof title !== "string" || title.length > 40) {
         errorsArray.push(errTitle);
     }
