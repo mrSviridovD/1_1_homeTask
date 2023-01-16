@@ -168,7 +168,7 @@ app.put('/videos/:id',(req:Request, res:Response) => {
     if (errorsArray.length > 0) {
         errors = { errorsMessages: errorsArray};
         res
-            .status(404)
+            .status(400)
             .json(errors)
         return;
     }
