@@ -2,7 +2,7 @@ import express, {Request, Response} from 'express'
 import bodyParser from 'body-parser'
 import {videosRouter} from "./routes/videos-router";
 
-const app = express()
+export const app = express()
 const port = process.env.PORT || 3000
 const parserMiddleware =bodyParser({})
 app.use(parserMiddleware)
